@@ -1,6 +1,4 @@
-<!--
-Druga strona
--->
+<!--Druga strona-->
 
 <!DOCTYPE html>
 <html lang="pl">
@@ -9,7 +7,7 @@ Druga strona
 <title>Weryfikacja użytkownika</title>
 <style>
   body {
-    font-family: Arial, sans-serif;
+    font-family: Impact, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -17,7 +15,7 @@ Druga strona
     background-color: black;
   }
   .container {
-    background-color: white;
+    background-color: limegreen;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.3);
@@ -28,17 +26,23 @@ Druga strona
     margin-top: 10px;
   }
   input {
+    background-color: lightgray;
     width: 100%;
     padding: 5px;
+    border-radius: 8px;
     margin-top: 5px;
     box-sizing: border-box;
+    font-family: Times New Roman, sans-serif;
   }
   button {
+    background-color: limegreen;
     margin-top: 15px;
     width: 100%;
     padding: 10px;
+    border-radius: 8px;
     font-size: 16px;
     cursor: pointer;
+    font-family: Times New Roman, sans-serif;
   }
 </style>
 </head>
@@ -60,8 +64,11 @@ Druga strona
     const passwordInput = document.getElementById('password').value.trim();
 
     const users = [
-      { name: 'Dawid Czyżyk', password: '123' },
-      { name: 'Norbert Kozak', password: '456' }
+      { name: 'Admin', password: 'Kacper2008' },
+      { name: 'Dawid Czyżyk', password: 'test123' },
+      { name: 'Max Gucwa', password: 'test456' },
+      { name: 'Jakub Jasnos', password: 'Zorro53741' },
+      { name: 'Norbert Kozak', password: '67cristianoronaldo' }
     ];
 
     const userFound = users.some(user => 

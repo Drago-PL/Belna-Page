@@ -28,6 +28,12 @@
     background-color: limegreen;
     color: black;
     font-family: Times New Roman, sans-serif;
+    transition: background-color 0.3s, transform 0.2s;
+  }
+  
+  button:hover {
+    background-color: #76c776; /* ciemniejszy zielony na hover */
+    transform: scale(1.05);
   }
   
   .version {
@@ -46,6 +52,6 @@
 <button onclick="window.location.href='verify.html'">weryfikacja urzytkownika</button>
 
 <!-- Wersja -->
-<div class="version">Wersja:Beta/0.0.1</div>
+<div class="version">Wersja:Beta/0.0.2</div>
 </body>
 </html>

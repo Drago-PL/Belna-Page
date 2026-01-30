@@ -1,0 +1,83 @@
+<!--
+Druga strona
+-->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<title>Weryfikacja użytkownika</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: black;
+  }
+  .container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    width: 300px;
+  }
+  label {
+    display: block;
+    margin-top: 10px;
+  }
+  input {
+    width: 100%;
+    padding: 5px;
+    margin-top: 5px;
+    box-sizing: border-box;
+  }
+  button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h2>Weryfikacja użytkownika</h2>
+  <form id="verifyForm" onsubmit="return validateUser();">
+    <label for="name">Imię i nazwisko:</label>
+    <input type="text" id="name" name="name" required />
+    <label for="password">Hasło:</label>
+    <input type="password" id="password" name="password" required />
+    <button type="submit">Zatwierdź</button>
+  </form>
+</div>
+
+<script>
+  function validateUser() {
+    const nameInput = document.getElementById('name').value.trim();
+    const passwordInput = document.getElementById('password').value.trim();
+
+    const users = [
+      { name: 'Dawid Czyżyk', password: '123' },
+      { name: 'Norbert Kozak', password: '456' }
+    ];
+
+    const userFound = users.some(user => 
+      user.name === nameInput && user.password === passwordInput
+    );
+
+    if (userFound) {
+      // Jeśli dane się zgadzają, przekieruj do pusta strony
+      window.location.href = 'welcome.html';
+    } else {
+      alert('Niepoprawne dane. Spróbuj ponownie.');
+    }
+
+    // Zapobiega wysłaniu formularza do serwera
+    return false;
+  }
+</script>
+</body>
+</html>

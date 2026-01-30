@@ -1,19 +1,19 @@
-<!-- 
-Pierwsza strona
--->
+<!-- Pierwsza strona-->
 
 <!DOCTYPE html>
 <html lang="pl">
 <head>
 <meta charset="UTF-8" />
-<title>Strona główna</title>
+<title>Strona Belnijska</title>
 <style>
   body {
     background-color: black;
     color: limegreen;
-    font-family: Arial, sans-serif;
+    font-family: Impact, sans-serif;
     text-align: center;
     margin-top: 100px;
+    position: relative;
+    min-height: 100vh;
   }
   h1 {
     font-size: 24px;
@@ -23,11 +23,29 @@ Pierwsza strona
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: limegreen;
+    color: black;
+    font-family: Times New Roman, sans-serif;
+  }
+  
+  .version {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+    text-align: center;
+    color: white;
+    font-family: Times New Roman, sans-serif;
+    font-size: 14px;
   }
 </style>
 </head>
 <body>
 <h1>Witamy na Belnijskiej stronie mocy</h1>
 <button onclick="window.location.href='verify.html'">weryfikacja urzytkownika</button>
+
+<!-- Wersja -->
+<div class="version">Wersja:Beta/0.0.1</div>
 </body>
 </html>

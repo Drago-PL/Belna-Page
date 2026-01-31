@@ -47,7 +47,7 @@
   }
   
   button:hover {
-    background-color: #76c776; /* ciemniejszy zielony na hover */
+    background-color: #76c776;
     transform: scale(1.05);
   }
   
@@ -84,13 +84,10 @@
     );
 
     if (userFound) {
-      // Jeśli dane się zgadzają, przekieruj do pusta strony
       window.location.href = 'welcome.html';
     } else {
       alert('Niepoprawne dane. Spróbuj ponownie.');
     }
-
-    // Zapobiega wysłaniu formularza do serwera
     return false;
   }
 </script>

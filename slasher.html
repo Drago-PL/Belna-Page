@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<title>Horror 3D - Ucieczka przed Ghostfacem</title>
+<style>
+  body { margin: 0; overflow: hidden; }
+  #gameOver { position: absolute; top: 50%; left:50%; transform: translate(-50%, -50%);
+              font-size: 48px; color: red; display: none; }
+</style>
+</head>
+<body>
+<div id="gameOver">GAME OVER! zostałeś złapany przez Ghostfaca!</div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
+<script>
+  // Inicjalizacja sceny, kamery i renderera
+  let scene, camera, renderer;
+  let ghost, player;
+  let clock = new THREE.Clock();
+  let gameOver = false;
+
+  init();
+  animate();
+
+  function init() {
+    // Tworzymy scenę
+    scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x000000);
+
+    // Kamera
+    camera = new THREE.PerspectiveCamera(
+      75, window.innerWidth/window.innerHeight, 0.1, 1000
+    );
+    camera.position.set(0, 1.6, 5); // Wysokość oczu
+
+    // Renderer
+    renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+    // Dodajemy podłogę
+    const floorGeometry = new THREE.PlaneGeometry(50, 50);
+    const floorMaterial = new THREE.MeshStandardMaterial({ color: 0x222222 });
+    const floor = new THREE.Mesh(floorGeometry, floorMaterial);
+    floor.rotation.x = -Math.PI/2;
+    scene.add(floor);
+
+    // Oświetlenie
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    scene.add(ambientLight);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+    directionalLight.position.set(10, 20, 10);
+    scene.add(directionalLight);
+
+    // Gracz - reprezentowany jako prosty sześcian
+    const playerGeometry = new THREE.BoxGeometry(0.5, 1.8, 0.5);
+    const playerMaterial = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
+    player = new THREE.Mesh(playerGeometry, playerMaterial);
+    player.position.y = 0.9; // pół wysokości
+    scene.add(player);
+
+    // Ghost - przeciwnik
+    const ghostGeometry = new THREE.SphereGeometry(1, 32, 32);
+    const ghostMaterial = new THREE.MeshStandardMaterial({ color: 0xff0000, transparent: true, opacity: 0.7 });
+    ghost = new THREE.Mesh(ghostGeometry, ghostMaterial);
+    ghost.position.set(0, 1, -20);
+    scene.add(ghost);
+
+    // Obsługa klawiszy
+    document.addEventListener('keydown', onKeyDown);
+    document.addEventListener('keyup', onKeyUp);
+
+    // Zmienna do poruszania się
+    window.keys = {};
+  }
+
+  function onKeyDown(event) {
+    window.keys[event.key.toLowerCase()] = true;
+  }
+
+  function onKeyUp(event) {
+    window.keys[event.key.toLowerCase()] = false;
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+
+    if (gameOver) return;
+
+    const delta = clock.getDelta();
+
+    // Ruch gracza
+    const moveSpeed = 5; // jednostek na sekundę
+    if (window.keys['w']) {
+      player.position.z -= moveSpeed * delta;
+    }
+    if (window.keys['s']) {
+      player.position.z += moveSpeed * delta;
+    }
+    if (window.keys['a']) {
+      player.position.x -= moveSpeed * delta;
+    }
+    if (window.keys['d']) {
+      player.position.x += moveSpeed * delta;
+    }
+
+    // Kamera śledzi gracza
+    camera.position.x = player.position.x;
+    camera.position.z = player.position.z + 5;
+    camera.lookAt(player.position);
+
+    // Przemieszczanie Ghostfacem
+    const ghostSpeed = 2; // jednostek na sekundę
+    // Ghost podąża do gracza
+    const direction = new THREE.Vector3();
+    direction.subVectors(player.position, ghost.position).normalize();
+    ghost.position.addScaledVector(direction, ghostSpeed * delta);
+
+    // Sprawdzanie kolizji (czy Ghost jest blisko)
+    if (ghost.position.distanceTo(player.position) < 1.5) {
+      endGame();
+    }
+
+    renderer.render(scene, camera);
+  }
+
+  function endGame() {
+    document.getElementById('gameOver').style.display = 'block';
+    gameOver = true;
+  }
+
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+</script>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!--Czat-->
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Czat</title>
+
+<style>
+  body {
+    background-color: black;
+    font-family: Arial, sans-serif;
+    align-items: center;
+  }
+
+  h1 {
+    font-family: Impact, Arial, sans-serif;
+    font-size: 48px;
+    color: limegreen;
+    margin-bottom: 40px;
+  }
+  
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js/dist/supabase.min.js"></script>
+</head>
+<body>
+<h1>Czat Belnijski</h1>
+<div id="messages" style="border:1px solid #ccc; height:300px; overflow-y:auto; padding:10px;">
+<!-- Wiadomości będą tutaj -->
+</div>
+<form id="message-form">
+  <input type="text" id="username" placeholder="Nazwa użytkownika" required />
+  <input type="text" id="message" placeholder="Wiadomość" required />
+  <button type="submit">Wyślij</button>
+</form>
+
+<script>
+  // Podstawowe dane do połączenia z Supabase
+  const supabaseUrl = 'https://fegyjvfmuttbvaghydlm.supabase.co';
+  const supabaseKey = 'https://fegyjvfmuttbvaghydlm.supabase.co/rest/v1/';
+  const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+  const messagesDiv = document.getElementById('messages');
+  const form = document.getElementById('message-form');
+
+  // Funkcja do dodawania wiadomości do widoku
+  function addMessage(data) {
+    const msg = document.createElement('div');
+    msg.innerHTML = `<strong>${data.username}:</strong> ${data.message}`;
+    messagesDiv.appendChild(msg);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight; // przewiń na dół
+  }
+
+  // Pobierz istniejące wiadomości
+  async function loadMessages() {
+    const { data, error } = await supabase
+      .from('messages')
+      .select('*')
+      .order('inserted_at', { ascending: true });
+    if (error) {
+      console.error(error);
+    } else {
+      data.forEach(addMessage);
+    }
+  }
+
+  // Subskrypcja na nowe wiadomości
+  supabase
+    .from('messages')
+    .on('INSERT', payload => {
+      addMessage(payload.new);
+    })
+    .subscribe();
+
+  // Obsługa wysyłania wiadomości
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const username = document.getElementById('username').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (username && message) {
+      const { error } = await supabase
+        .from('messages')
+        .insert([{ username, message }]);
+      if (error) {
+        alert('Błąd wysyłania wiadomości');
+        console.error(error);
+      } else {
+        document.getElementById('message').value = '';
+      }
+    }
+  });
+
+  // Załaduj wcześniejsze wiadomości przy starcie
+  loadMessages();
+</script>
+</body>
+</html>
